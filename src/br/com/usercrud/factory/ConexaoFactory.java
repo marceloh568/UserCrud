@@ -4,22 +4,35 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConexaoFactory {
-	private static final String USUARIO = "root";
-	private static final String SENHA = "mysql";
-	private static final String URL = "jdbc:mysql://localhost:3306/usercrud";
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
-	public static Connection con() throws SQLException {
-		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-		Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
-		return conexao;
-	}
+import br.com.usercrud.util.ProjetoException;
 
-	public static void main(String[] args) {
+public class ConexaoFactory{
+
+	public static Connection getConnection() throws ProjetoException{
+
+		String url = "jdbc:postgresql://localhost:5432/banco_local";
+		String usuario = "postgres";
+		String senha = "post";
+		
 		try {
-			Connection conexao = ConexaoFactory.con();
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+			Class.forName("org.postgresql.Driver");
+			Connection con;
+			con = DriverManager.getConnection(url, usuario, senha);
+			con.setAutoCommit(false);
+			return con;
+		} catch (ClassNotFoundException cnf) {
+			FacesMessage msg = null;
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Driver de conexao com o banco nao encontrado \n Mensagem original: " + cnf.getMessage(), "Erro");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			throw new ProjetoException(msg.toString());
+		} catch (SQLException sql) {
+			FacesMessage msg = null;
+			msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Nao foi possivel abrir a conexao com o banco \n Mensagem original: " + sql.getMessage(), "Erro");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
+			throw new ProjetoException(sql.getMessage());
 		}
 	}
 

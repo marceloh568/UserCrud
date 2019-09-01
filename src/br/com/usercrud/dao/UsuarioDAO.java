@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import br.com.usercrud.model.Usuario;
+import br.com.usercrud.util.ProjetoException;
 import br.com.usercrud.factory.ConexaoFactory;
 
 public class UsuarioDAO {
@@ -11,10 +12,16 @@ public class UsuarioDAO {
 	public void salvar(Usuario u) throws SQLException {
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO usuario (descricao_usuario, cpf_usuario, email_usuario, data_nascimento_usuario, senha_usuario) ");
+		sql.append("INSERT INTO usercrud.usuario (descricao_usuario, cpf_usuario, email_usuario, data_nascimento_usuario, senha_usuario) ");
 		sql.append("VALUES (?, ?, ?, ?, ?)");
 
-		Connection conexao = ConexaoFactory.con();
+		Connection conexao = null;
+		try {
+			conexao = ConexaoFactory.getConnection();
+		} catch (ProjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		PreparedStatement ps = conexao.prepareStatement(sql.toString());
 		ps.setString(1, u.getDescricao());
@@ -24,6 +31,7 @@ public class UsuarioDAO {
 		ps.setString(5, u.getSenha());
 
 		ps.executeUpdate();
+		conexao.commit();
 		conexao.close();
 	}
 
@@ -31,9 +39,15 @@ public class UsuarioDAO {
 
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id_usuario, descricao_usuario, cpf_usuario, email_usuario, data_nascimento_usuario, senha_usuario ");
-		sql.append("FROM usuario ORDER BY descricao_usuario ASC");
+		sql.append("FROM usercrud.usuario ORDER BY descricao_usuario ASC");
 
-		Connection conexao = ConexaoFactory.con();
+		Connection conexao = null;
+		try {
+			conexao = ConexaoFactory.getConnection();
+		} catch (ProjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		PreparedStatement ps = conexao.prepareStatement(sql.toString());
 
@@ -53,6 +67,7 @@ public class UsuarioDAO {
 			lista.add(u);
 		}
 
+		conexao.commit();
 		conexao.close();
 		return lista;	
 	}
@@ -60,27 +75,40 @@ public class UsuarioDAO {
 	public void excluir(Usuario u) throws SQLException {
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("DELETE FROM usuario " + "WHERE id_usuario = ?");
+		sql.append("DELETE FROM usercrud.usuario " + "WHERE id_usuario = ?");
 
-		Connection conexao = ConexaoFactory.con();
+		Connection conexao = null;
+		try {
+			conexao = ConexaoFactory.getConnection();
+		} catch (ProjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		PreparedStatement ps = conexao.prepareStatement(sql.toString());
 		ps.setLong(1, u.getId());
 
 		ps.executeUpdate();
 		
+		conexao.commit();
 		conexao.close();
 	}
 
 	public void editar(Usuario u) throws SQLException {
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE usuario ");
+		sql.append("UPDATE usercrud.usuario ");
 		sql.append("SET descricao_usuario = ?, cpf_usuario = ?, ");
 		sql.append("email_usuario = ?, data_nascimento_usuario = ?, senha_usuario = ? ");
 		sql.append("WHERE id_usuario = ?");
 
-		Connection conexao = ConexaoFactory.con();
+		Connection conexao = null;
+		try {
+			conexao = ConexaoFactory.getConnection();
+		} catch (ProjetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		PreparedStatement ps = conexao.prepareStatement(sql.toString());
 
@@ -93,6 +121,7 @@ public class UsuarioDAO {
 
 		ps.executeUpdate();
 		
+		conexao.commit();
 		conexao.close();
 	}
 }

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
@@ -45,7 +45,7 @@ public class UsuarioBean {
 		this.itensFiltrados = itensFiltrados;
 	}
 
-	@PostConstruct
+	//@PostConstruct
 	public void prepararPesquisa() {
 
 		try {
@@ -79,7 +79,7 @@ public class UsuarioBean {
 
 			itens = dao.listar();
 
-			JSFUtil.adicionarMenssagemSucesso("Usuário salvo com sucesso!");
+			JSFUtil.adicionarMenssagemSucesso("Usuï¿½rio salvo com sucesso!");
 		} catch (SQLException ex) {
 			alertarErroGeral(ex);
 		}
@@ -94,7 +94,7 @@ public class UsuarioBean {
 
 			itens = dao.listar();
 
-			JSFUtil.adicionarMenssagemSucesso("Usuário excluído com êxito!");
+			JSFUtil.adicionarMenssagemSucesso("Usuï¿½rio excluï¿½do com ï¿½xito!");
 		} catch (SQLException ex) {
 			alertarErroGeral(ex);
 		}
@@ -108,7 +108,7 @@ public class UsuarioBean {
 
 			itens = dao.listar();
 
-			JSFUtil.adicionarMenssagemSucesso("Usuário editado com êxito!");
+			JSFUtil.adicionarMenssagemSucesso("Usuï¿½rio editado com ï¿½xito!");
 		} catch (SQLException ex) {
 			alertarErroGeral(ex);
 		}
